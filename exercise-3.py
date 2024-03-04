@@ -8,41 +8,34 @@ class FlatIterator:
         return self
 
     def __next__(self):
-        result = self.list_of_list
+        result = None
         flag_repeat = True
-        flag_stop = False
         while flag_repeat:
+            result = self.list_of_list
             for index in self.next:
                 try:
                     result = result[index]
                 except IndexError:
                     if len(self.next) == 1:
-                        flag_repeat = False
-                        flag_stop = True
+                        raise StopIteration
                     else:
                         self.next.pop()
-                        self.next[len(self.next) - 1] += 1
-                        result = self.list_of_list
+                        self.next[len(self.next)-1] += 1
                         flag_repeat = True
                 else:
                     if result == []:
                         self.next[len(self.next)-1] += 1
-                        result = self.list_of_list
                         flag_repeat = True
                     else:
                         flag_repeat = False
-        if flag_stop:
-            raise StopIteration
-        else:
-            while True:
-                if isinstance(result, list):
-                    result = result[0]
-                    self.next.append(0)
-                else:
-                    self.next[len(self.next)-1] += 1
-                    result = result
-                    break
-            return result
+        while True:
+            if isinstance(result, list):
+                result = result[0]
+                self.next.append(0)
+            else:
+                self.next[len(self.next)-1] += 1
+                break
+        return result
 
 
 def test_3():
